@@ -1,0 +1,15 @@
+services:
+  app-web:
+    build: .
+    container_name: maquina-1-frontend
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - inventory-net
+
+networks:
+  inventory-net:
+    driver: bridge
