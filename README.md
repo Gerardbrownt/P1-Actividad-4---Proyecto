@@ -8,7 +8,7 @@ El sistema está distribuido en 3 máquinas físicas conectadas mediante una VPN
 
 ## Configuración de Red (Tailscale)
 - **IP Máquina 1:** 100.72.35.32
-- **IP Máquina 2:** [Insertar IP aquí]
+- **IP Máquina 2:** 100.113.243.28
 - **IP Máquina 3:** [Insertar IP aquí]
 
 ## Requisitos
