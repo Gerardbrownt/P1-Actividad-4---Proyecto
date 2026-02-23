@@ -36,4 +36,5 @@ El sistema está distribuido en 3 máquinas físicas conectadas mediante una VPN
 <img width="1852" height="950" alt="image" src="https://github.com/user-attachments/assets/d650436d-d00c-4532-8804-9cc9ad5dfc21" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d08d3b04-29db-40e4-b415-74d135698993" />
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/da80cebe-630d-4a0c-87f8-f8db49c44115" />
 
