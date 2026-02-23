@@ -15,6 +15,6 @@ app.get('/health', (req, res) => {
 
 app.use('/reportes', reportesRouter);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servicio de reportes corriendo en puerto ${PORT}`);
 });

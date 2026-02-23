@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db/db');
+const pool = require('../db');
 
 router.get('/stock-bajo', async (req, res) => {
   try {
