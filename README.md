@@ -54,69 +54,50 @@ flowchart TD
 ## Instrucciones de despliegue paso a paso
 Para levantar el proyecto correctamente, es importante respetar el orden de inicio de los servicios (la base de datos debe ir primero).
 
-Paso 1: Configurar la Red (Todas las máquinas)
-Instalar Tailscale en las 3 máquinas físicas y loguearse con la misma cuenta del equipo.
+### Paso 1: Configurar la Red (Todas las máquinas)
+1. Instalar [Tailscale](https://tailscale.com/) en las 3 máquinas físicas y loguearse con la misma cuenta del equipo.
+2. Anotar la IP de Tailscale de la Máquina 2 (Base de Datos) y la Máquina 3 (Reportes).
 
-Anotar la IP de Tailscale de la Máquina 2 (Base de Datos) y la Máquina 3 (Reportes).
+### Paso 2: Desplegar Máquina 2 (Base de Datos)
+*Responsable: Estudiante B*
+1. Clonar el repositorio y entrar a la carpeta `/base-datos/`.
+2. Crear el archivo `.env` basado en `.env.example`.
+3. Levantar los contenedores:
+   ```bash
+   docker compose up -d
+   ```
+*(La BD ya incluirá las tablas y los datos semilla gracias al script de inicialización).*
 
-Paso 2: Desplegar Máquina 2 (Base de Datos)
-Responsable: Estudiante B
+### Paso 3: Desplegar Máquina 3 (Servicio de Reportes)
+*Responsable: Estudiante C*
+1. Clonar el repositorio y entrar a la carpeta `/servicio-reportes/`.
+2. Crear el archivo `.env` y configurar `DB_HOST` con la IP de Tailscale de la **Máquina 2**.
+3. Compilar y levantar el servicio:
+   ```bash
+   docker compose down
+   docker compose up --build -d
+   ```
 
-Clonar el repositorio y entrar a la carpeta /base-datos/.
-
-Crear el archivo .env basado en .env.example.
-
-Levantar los contenedores:
-
-Bash
-
-docker compose up -d
-(La BD ya incluirá las tablas y los datos semilla gracias al script de inicialización).
-
-Paso 3: Desplegar Máquina 3 (Servicio de Reportes)
-Responsable: Estudiante C
-
-Clonar el repositorio y entrar a la carpeta /servicio-reportes/.
-
-Crear el archivo .env y configurar DB_HOST con la IP de Tailscale de la Máquina 2.
-
-Compilar y levantar el servicio:
-
-Bash
-
-docker compose down
-docker compose up --build -d
-Paso 4: Desplegar Máquina 1 (App Web / Frontend)
-Responsable: Estudiante A
-
-Clonar el repositorio y entrar a la carpeta /app-web/.
-
-Crear el archivo .env configurando:
-
-DB_HOST: Con la IP de Tailscale de la Máquina 2.
-
-REPORT_SERVICE_URL: Con la IP de Tailscale de la Máquina 3 (Ej: http://100.x.x.x:8081).
-
-Compilar el frontend localmente:
-
-Bash
-
-cd client
-npm install
-npm run build
-cd ..
-Levantar el contenedor principal:
-
-Bash
-
-docker compose down
-docker compose up --build -d
-🌐 ¡Listo! Abrir el navegador en http://localhost:8080 (o desde la IP de Tailscale de la Máquina 1).
-
-
-***
-
-Con eso tienes el README nítido, sin relleno y con un diagrama que se va a ver súper pro cuando
+### Paso 4: Desplegar Máquina 1 (App Web / Frontend)
+*Responsable: Estudiante A*
+1. Clonar el repositorio y entrar a la carpeta `/app-web/`.
+2. Crear el archivo `.env` configurando:
+   * `DB_HOST`: Con la IP de Tailscale de la Máquina 2.
+   * `REPORT_SERVICE_URL`: Con la IP de Tailscale de la Máquina 3 (Ej: `http://100.x.x.x:8081`).
+3. Compilar el frontend localmente:
+   ```bash
+   cd client
+   npm install
+   npm run build
+   cd ..
+   ```
+4. Levantar el contenedor principal:
+   ```bash
+   docker compose down
+   docker compose up --build -d
+   ```
+5. 🌐 **¡Listo!** Abrir el navegador en `http://localhost:8080` (o desde la IP de Tailscale de la Máquina 1).
+   
 ## Captura de pantalla de Tailscale mostrando las 3 máquinas conectadas
 <img width="1847" height="945" alt="image" src="https://github.com/user-attachments/assets/2b7efd16-84cb-4de1-a4f6-6ddeeae62111" />
 
