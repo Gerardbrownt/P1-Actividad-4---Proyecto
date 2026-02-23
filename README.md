@@ -21,12 +21,102 @@ El sistema está distribuido en 3 máquinas físicas conectadas mediante una VPN
 3. Ejecutar: `docker-compose up --build`
 
 ## Diagrama de arquitectura del sistema
+ ```mermaid
+flowchart TD
+    Cliente["🌐 Navegador Web del Usuario"]
 
+    subgraph VPN ["Red Segura Tailscale (VPN)"]
+        
+        subgraph M1 ["💻 Máquina 1 (Frontend + API)"]
+            APP["App Web (React + Express)\nPuerto: 8080"]
+        end
+        
+        subgraph M2 ["🗄️ Máquina 2 (Base de Datos)"]
+            DB[("PostgreSQL\nPuerto expuesto: 5050")]
+            PGA["pgAdmin\nPuerto: 8082"]
+        end
+
+        subgraph M3 ["📊 Máquina 3 (Reportes)"]
+            REP["API Reportes (Express)\nPuerto: 8081"]
+        end
+
+        APP -- "CRUD de Inventario\n(DB_HOST)" --> DB
+        APP -- "Pide Reportes\n(REPORT_SERVICE_URL)" --> REP
+        REP -- "Consulta Datos\n(DB_HOST)" --> DB
+        PGA -. "Administración BD" .-> DB
+    end
+
+    Cliente == "Accede a la interfaz" ==> APP
+```
 ## Diagrama de base de datos (ER o modelo de documentos)
 <img width="450" height="765" alt="Screenshot 2026-02-22 195100" src="https://github.com/user-attachments/assets/2951a461-c862-444f-805b-4c1f8a4aa3b9" />
 
 ## Instrucciones de despliegue paso a paso
+Para levantar el proyecto correctamente, es importante respetar el orden de inicio de los servicios (la base de datos debe ir primero).
 
+Paso 1: Configurar la Red (Todas las máquinas)
+Instalar Tailscale en las 3 máquinas físicas y loguearse con la misma cuenta del equipo.
+
+Anotar la IP de Tailscale de la Máquina 2 (Base de Datos) y la Máquina 3 (Reportes).
+
+Paso 2: Desplegar Máquina 2 (Base de Datos)
+Responsable: Estudiante B
+
+Clonar el repositorio y entrar a la carpeta /base-datos/.
+
+Crear el archivo .env basado en .env.example.
+
+Levantar los contenedores:
+
+Bash
+
+docker compose up -d
+(La BD ya incluirá las tablas y los datos semilla gracias al script de inicialización).
+
+Paso 3: Desplegar Máquina 3 (Servicio de Reportes)
+Responsable: Estudiante C
+
+Clonar el repositorio y entrar a la carpeta /servicio-reportes/.
+
+Crear el archivo .env y configurar DB_HOST con la IP de Tailscale de la Máquina 2.
+
+Compilar y levantar el servicio:
+
+Bash
+
+docker compose down
+docker compose up --build -d
+Paso 4: Desplegar Máquina 1 (App Web / Frontend)
+Responsable: Estudiante A
+
+Clonar el repositorio y entrar a la carpeta /app-web/.
+
+Crear el archivo .env configurando:
+
+DB_HOST: Con la IP de Tailscale de la Máquina 2.
+
+REPORT_SERVICE_URL: Con la IP de Tailscale de la Máquina 3 (Ej: http://100.x.x.x:8081).
+
+Compilar el frontend localmente:
+
+Bash
+
+cd client
+npm install
+npm run build
+cd ..
+Levantar el contenedor principal:
+
+Bash
+
+docker compose down
+docker compose up --build -d
+🌐 ¡Listo! Abrir el navegador en http://localhost:8080 (o desde la IP de Tailscale de la Máquina 1).
+
+
+***
+
+Con eso tienes el README nítido, sin relleno y con un diagrama que se va a ver súper pro cuando
 ## Captura de pantalla de Tailscale mostrando las 3 máquinas conectadas
 <img width="1847" height="945" alt="image" src="https://github.com/user-attachments/assets/2b7efd16-84cb-4de1-a4f6-6ddeeae62111" />
 
