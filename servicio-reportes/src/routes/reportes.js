@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db');
+const pool = require('../db/db'); // Asegúrate de que la ruta sea correcta según tu estructura
 
 // 1. Productos con stock bajo
 router.get('/stock-bajo', async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT p.id, p.nombre, p.stock_actual, p.stock_minimo, c.nombre AS categoria
+      SELECT p.id, p.nombre, p.stock, p.stock_minimo, c.nombre AS categoria
       FROM productos p
       JOIN categorias c ON p.categoria_id = c.id
-      WHERE p.stock_actual <= p.stock_minimo
-      ORDER BY p.stock_actual ASC
+      WHERE p.stock <= p.stock_minimo
+      ORDER BY p.stock ASC
     `);
     res.json(result.rows);
   } catch (err) {
@@ -47,7 +47,7 @@ router.get('/valor-inventario', async (req, res) => {
     const result = await pool.query(`
       SELECT c.nombre AS categoria,
              COUNT(p.id) AS total_productos,
-             SUM(p.precio_unitario * p.stock_actual) AS valor_total
+             SUM(p.precio * p.stock) AS valor_total
       FROM productos p
       JOIN categorias c ON p.categoria_id = c.id
       GROUP BY c.nombre
@@ -90,7 +90,7 @@ router.get('/resumen-proveedor', async (req, res) => {
     const result = await pool.query(`
       SELECT pv.id, pv.nombre AS proveedor,
              COUNT(p.id) AS total_productos,
-             SUM(p.precio_unitario * p.stock_actual) AS valor_total_inventario
+             SUM(p.precio * p.stock) AS valor_total_inventario
       FROM proveedores pv
       LEFT JOIN productos p ON p.proveedor_id = pv.id
       GROUP BY pv.id, pv.nombre
