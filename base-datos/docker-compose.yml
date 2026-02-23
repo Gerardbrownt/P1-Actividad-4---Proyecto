@@ -3,11 +3,11 @@ version: "3.9"
 services:
   db:
     image: postgres:16
-    container_name: inventario_db
+    container_name: bodega_db #La base de datos , nombre del contenedor
     restart: always
     env_file: .env
     ports:
-      - "5432:5432"
+      - "5050:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d
@@ -16,11 +16,11 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: inventario_pgadmin
+    container_name: pgadminWeb
     restart: always
     env_file: .env
     ports:
-      - "5050:80"
+      - "8082:80"
     depends_on:
       - db
     networks:
@@ -28,7 +28,7 @@ services:
 
 volumes:
   db_data:
-
+ 
 networks:
   inventario_net:
     driver: bridge

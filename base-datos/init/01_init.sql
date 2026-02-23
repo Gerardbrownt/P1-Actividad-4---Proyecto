@@ -1,48 +1,46 @@
 -- =========================
--- ESQUEMA DE INVENTARIO
+-- ESQUEMA DE INVENTARIO CORREGIDO
 -- =========================
-
 CREATE TABLE categorias (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE,
-    descripcion TEXT
+ id SERIAL PRIMARY KEY,
+ nombre VARCHAR(100) NOT NULL UNIQUE,
+ descripcion TEXT
 );
 
-CREATE TABLE provedores (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(150) NOT NULL,
-    contacto VARCHAR(100),
-    telefono VARCHAR(50),
-    email VARCHAR(120),
-    direccion TEXT
+CREATE TABLE proveedores (
+ id SERIAL PRIMARY KEY,
+ nombre VARCHAR(150) NOT NULL,
+ contacto VARCHAR(100),
+ telefono VARCHAR(50),
+ email VARCHAR(120),
+ direccion TEXT
 );
 
 CREATE TABLE productos (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(150) NOT NULL,
-    descripcion TEXT,
-    precio_unitario NUMERIC(10,2) NOT NULL,
-    stock_actual INT NOT NULL DEFAULT 0,
-    stock_minimo INT NOT NULL DEFAULT 0,
-    categoria_id INT NOT NULL REFERENCES categorias(id) ON DELETE RESTRICT,
-    provedor_id INT NOT NULL REFERENCES provedores(id) ON DELETE RESTRICT
+ id SERIAL PRIMARY KEY,
+ nombre VARCHAR(150) NOT NULL,
+ descripcion TEXT,
+ precio NUMERIC(10,2) NOT NULL,
+ stock INT NOT NULL DEFAULT 0,
+ stock_minimo INT NOT NULL DEFAULT 0,
+ categoria_id INT NOT NULL REFERENCES categorias(id) ON DELETE RESTRICT,
+ proveedor_id INT NOT NULL REFERENCES proveedores(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE movimientos (
-    id SERIAL PRIMARY KEY,
-    producto_id INT NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
-    tipo VARCHAR(10) NOT NULL CHECK (tipo IN ('entrada','salida')),
-    cantidad INT NOT NULL,
-    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
-    provedor_id INT REFERENCES provedores(id),
-    motivo VARCHAR(150),
-    observacion TEXT
+ id SERIAL PRIMARY KEY,
+ producto_id INT NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
+ tipo VARCHAR(10) NOT NULL CHECK (tipo IN ('entrada','salida')),
+ cantidad INT NOT NULL,
+ fecha TIMESTAMP NOT NULL DEFAULT NOW(),
+ proveedor_id INT REFERENCES proveedores(id),
+ motivo VARCHAR(150),
+ observacion TEXT
 );
 
 -- =========================
 -- DATOS SEMILLA
 -- =========================
-
 INSERT INTO categorias (nombre, descripcion) VALUES
 ('Bebidas', 'Productos líquidos y gaseosas'),
 ('Lácteos', 'Leche, queso, yogurt'),
@@ -50,14 +48,14 @@ INSERT INTO categorias (nombre, descripcion) VALUES
 ('Snacks', 'Botanas y galletas'),
 ('Panadería', 'Pan y productos horneados');
 
-INSERT INTO provedores (nombre, contacto, telefono, email, direccion) VALUES
+INSERT INTO proveedores (nombre, contacto, telefono, email, direccion) VALUES
 ('Distribuidora Norte', 'Carlos Pérez', '0987654321', 'carlos@norte.com', 'Av. Norte 123'),
 ('Lácteos del Sur', 'María López', '0991122334', 'maria@lacteos.com', 'Calle Sur 45'),
 ('Aseo Total', 'Pedro Ruiz', '0977788899', 'pedro@aseo.com', 'Av. Central 789'),
 ('Panificadora Don Luis', 'Luis Torres', '0964455667', 'luis@pan.com', 'Calle Pan 12'),
 ('Snacks Express', 'Ana Ríos', '0952233445', 'ana@snacks.com', 'Zona Comercial 99');
 
-INSERT INTO productos (nombre, descripcion, precio_unitario, stock_actual, stock_minimo, categoria_id, provedor_id) VALUES
+INSERT INTO productos (nombre, descripcion, precio, stock, stock_minimo, categoria_id, proveedor_id) VALUES
 ('Coca Cola 1L', 'Bebida gaseosa', 1.50, 50, 10, 1, 1),
 ('Agua Mineral 500ml', 'Agua sin gas', 0.80, 30, 5, 1, 1),
 ('Leche Entera 1L', 'Leche de vaca', 1.10, 40, 15, 2, 2),
@@ -80,7 +78,7 @@ INSERT INTO productos (nombre, descripcion, precio_unitario, stock_actual, stock
 ('Pan de Queso', 'Pan horneado', 1.60, 10, 5, 5, 4);
 
 -- 30 movimientos de ejemplo
-INSERT INTO movimientos (producto_id, tipo, cantidad, fecha, provedor_id, motivo, observacion) VALUES
+INSERT INTO movimientos (producto_id, tipo, cantidad, fecha, proveedor_id, motivo, observacion) VALUES
 (1,'entrada',20,'2026-02-01',1,'compra','lote inicial'),
 (2,'entrada',15,'2026-02-01',1,'compra','lote inicial'),
 (3,'entrada',25,'2026-02-02',2,'compra','lote inicial'),
