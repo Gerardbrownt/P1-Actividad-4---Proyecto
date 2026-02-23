@@ -20,16 +20,17 @@ El sistema está distribuido en 3 máquinas físicas conectadas mediante una VPN
 2. Configurar el archivo `.env` con las IPs de Tailscale de los compañeros.
 3. Ejecutar: `docker-compose up --build`
 
-Diagrama de arquitectura del sistema
+## Diagrama de arquitectura del sistema
 
-Diagrama de base de datos (ER o modelo de documentos)
+## Diagrama de base de datos (ER o modelo de documentos)
+<img width="450" height="765" alt="Screenshot 2026-02-22 195100" src="https://github.com/user-attachments/assets/2951a461-c862-444f-805b-4c1f8a4aa3b9" />
 
-Instrucciones de despliegue paso a paso
+## Instrucciones de despliegue paso a paso
 
-Captura de pantalla de Tailscale mostrando las 3 máquinas conectadas
+## Captura de pantalla de Tailscale mostrando las 3 máquinas conectadas
 <img width="1847" height="945" alt="image" src="https://github.com/user-attachments/assets/2b7efd16-84cb-4de1-a4f6-6ddeeae62111" />
 
-Capturas de los servicios funcionando
+## Capturas de los servicios funcionando
 <img width="1852" height="943" alt="image" src="https://github.com/user-attachments/assets/d7db7d3e-bb9a-4591-b3d5-81dc6f742f5e" />
 
 <img width="1852" height="950" alt="image" src="https://github.com/user-attachments/assets/d650436d-d00c-4532-8804-9cc9ad5dfc21" />
