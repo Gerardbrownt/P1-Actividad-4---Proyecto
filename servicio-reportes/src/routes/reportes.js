@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db/db'); // Asegúrate de que la ruta sea correcta según tu estructura
+const pool = require('../db/db');
 
-// 1. Productos con stock bajo
 router.get('/stock-bajo', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -18,7 +17,6 @@ router.get('/stock-bajo', async (req, res) => {
   }
 });
 
-// 2. Productos más movidos (Top 10 salidas por rango de fechas)
 router.get('/productos-movidos', async (req, res) => {
   const { fecha_inicio, fecha_fin } = req.query;
   if (!fecha_inicio || !fecha_fin)
@@ -41,7 +39,6 @@ router.get('/productos-movidos', async (req, res) => {
   }
 });
 
-// 3. Valor total del inventario desglosado por categoría
 router.get('/valor-inventario', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -60,7 +57,6 @@ router.get('/valor-inventario', async (req, res) => {
   }
 });
 
-// 4. Movimientos por rango de fechas
 router.get('/movimientos-por-fecha', async (req, res) => {
   const { fecha_inicio, fecha_fin } = req.query;
   if (!fecha_inicio || !fecha_fin)
@@ -84,7 +80,6 @@ router.get('/movimientos-por-fecha', async (req, res) => {
   }
 });
 
-// 5. Resumen por proveedor
 router.get('/resumen-proveedor', async (req, res) => {
   try {
     const result = await pool.query(`
